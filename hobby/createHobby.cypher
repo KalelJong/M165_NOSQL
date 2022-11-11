@@ -10,4 +10,11 @@ CREATE (aa:Hobby {hobby:'gaming', genre:'shooter'}),
        (ii:Hobby {hobby:'music', genre:'mpb'}),
        (jj:Hobby {hobby:'music', genre:'alt-rock'}),
        (kk:Hobby {hobby:'music', genre:'early 2000s punk-pop'}),
-       (kk:Hobby {hobby:'music', genre:'jazz'})
+       (ll:Hobby {hobby:'music', genre:'jazz'}),
+       (mm:Hobby {hobby:'music', genre: 'metal'}),
+       (oo:Hobby {hobby:'instrument', type:"acoustic guitar"}),
+       (nn:Hobby {hobby:'instrument', type:"electric guitar"}),
+       (pp:Hobby {hobby:'instrument', type:"bass guitar"}),
+       (qq:Hobby {hobby:'instrument',type:"keyboard/piano"}),
+       (rr:Hobby {hobby:'instrument', type:"violin"})
+

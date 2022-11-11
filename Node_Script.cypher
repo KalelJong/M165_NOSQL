@@ -101,7 +101,7 @@ CREATE (pKalel)-[:LISTENS_TO{artists:["Legiao Urbana", "Ben Jor", "Chico Buarque
   (pGrace)-[:LISTENS_TO]->(pp2000), (pGrace)-[:LISTENS_TO]->(rock),
   (pAlex)-[:LISTENS_TO]->(rock),(pAlex)-[:LISTENS_TO]->(alternative),
   (pZakria)-[:PLAYS{games:["Valorant", "Overwatch"]}]->(shooter), (pZakria)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
-  (pZakria)-[:PLAYS{games:["Smash Bros."]}]->(fighting),
+  (pZakria)-[:PLAYS{games:["Smash Bros."]}]->(fighting), (pGrace)-[:PLAYS{games:["Minecraft"]}]->(sandbox)
   (pZakria)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pJoseph)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pMolly)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
   (pSamuel)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pDamian)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pLeo)-[:PLAYS{games:["Minecraft"]}]->(sandbox)
   (pBecky)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pAron)-[:PLAYS{games:["Minecraft"]}]->(sandbox), 
@@ -110,6 +110,35 @@ CREATE (pKalel)-[:LISTENS_TO{artists:["Legiao Urbana", "Ben Jor", "Chico Buarque
   (pAlex)-[:PLAYS]->(bguitar), (pAlex)-[:PLAYS]->(piano),
   (pAkina)-[:PLAYS]->(violin), 
   (pGrace)-[:PLAYS]->(aguitar),(pGrace)-[:PLAYS]->(eguitar)
+
+// FIRST ADD SCHOOLS FROM FILE school/createSchools.cypher
+MATCH
+  (pKalel:Person {firstname: "Kalel"}),
+  (pMolly:Person {firstname: 'Molly'}),
+  (pBecky:Person {firstname: 'Becky'}),
+  (pMilena:Person {firstname: 'Milena'}),
+  (pAlex:Person {firstname: 'Alex'}),
+  (pAkina:Person {firstname: 'Akina'}),
+  (pJoseph:Person {firstname: 'Joseph'}),
+  (pAron:Person {firstname: 'Aron'}),
+  (pGrace: Person {firstname: "Grace"}),
+  (pZakria:Person {firstname: "Zakria"}),
+  (pLeo:Person {firstname: "Leo"}),
+  (pDamian:Person {firstname: "Damian"}),
+  (pSamuel:Person {firstname: "Samuel"}),
+  (tbz:School {name:"TBZ Technische Berufsschule Zürich"}),
+  (mng:School{name: "MNG Kantonsschule Rämibühl"}),
+  (bmz:School{name: "BMZ Berufmaturitätsschule Zürich"}),
+  (gbw:School{name: "Gewerbliche Berufsschule Wetzikon"}),
+  (bu:School {name: "Bildungszentrum Uster"}),
+  (hs:School{name: "Hull's School"}),
+  (hmz:School{name: "Handelsmittelschule Zürich"})
+
+CREATE (pKalel)-[:ATTENDS_TO]->(tbz),(pZakria)-[:ATTENDS_TO]->(tbz),(pAron)-[:ATTENDS_TO]->(tbz),
+(pKalel)-[:ATTENDS_TO]->(bmz), (pZakria)-[:ATTENDS_TO]->(bmz), (pAron)-[:ATTENDS_TO]->(bmz),
+(pJoseph)-[:ATTENDS_TO]->(bu), (pMilena)-[:ATTENDS_TO]->(gbw), (pGrace)-[:ATTENDS_TO]->(tbz),
+(pAkina)-[:ATTENDS_TO]->(hs), (pAlex)-[:ATTENDS_TO]->(mng),(pBecky)-[:ATTENDS_TO]->(mng),
+(pLeo)-[:ATTENDS_TO]->(hmz),(pDamian)-[:ATTENDS_TO]->(hmz),(pSamuel)-[:ATTENDS_TO]->(hmz)
 
 // Delete friendship
 MATCH (pKalel:Person {firstname: 'Kalel'})-[r:FRIENDS_WITH]->(pZakria:Person {firstname: 'Zakria'})

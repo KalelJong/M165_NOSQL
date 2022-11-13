@@ -7,6 +7,7 @@ Vielen Dank und wir wünschen Ihnen eine schöne Woche.
 -Kalel und Zakria :D
 ## GraphDB Überblick
 <img src="GraphDB.png">
+
 ## Dokumentation
 
 Wir haben uns entschieden, mit der Graph-Database Neo4J eine Mini soziale Netzwerk zu erstellen. 

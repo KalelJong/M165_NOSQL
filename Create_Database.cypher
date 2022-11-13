@@ -7,7 +7,7 @@ CREATE (pZakria:Person {firstname: 'Zakria', lastname: 'Samma', birthday: date('
 	   (pMilena:Person {firstname: 'Milena', lastname: 'Soldato', birthday: date('2005-05-30')}),
 	   (pAlex:Person {firstname: 'Alex', lastname: 'Kazmer', birthday: date('2004-10-26')}),
 	   (pAkina:Person {firstname: 'Akina', lastname: 'Keates', birthday: date('2005-11-12')}),
-	   (pJoseph:Person {firstname: 'Joseph', lastname: 'Boyse', birthday: date('2004-02-11')})
+	   (pJoseph:Person {firstname: 'Joseph', lastname: 'Boyse', birthday: date('2004-02-11')});
 
      
 // Create with relationship
@@ -16,25 +16,13 @@ CREATE p =
 -[ff:DATING {since: date("2022-07-01")}]->(pGrace: Person{firstname: 'Grace', lastname: 'Rose', birthday: date('2005-12-02')})
 RETURN p;
 
-
-MATCH (e:Person), (c:Person)
-WHERE ID(e) > -1 
- AND e.firstname <> c.firstname 
-MERGE (e)-[r:FRIENDS_WITH]->(c), (c)-[rel:FRIENDS_WITH]->(e);
-
 // Create relationship between all nodes
 // Explanation: All people created until now are in the same friend group
 MATCH (e:Person), (c:Person)
-WHERE 
-  ID(e) > -1 
- AND
-  e.firstname <> c.firstname
- AND 
-  EXISTS((e)-[:FRIENDS_WITH]->(c)) = false
- AND 
-  EXISTS((c)-[:FRIENDS_WITH]->(e)) = false 
-CREATE 
-  (e)-[r:FRIENDS_WITH]->(c), (c)-[rel:FRIENDS_WITH]->(e);
+WHERE ID(e) > -1 
+ AND e.firstname <> c.firstname 
+MERGE (e)-[r:FRIENDS_WITH]->(c)
+MERGE (c)-[rel:FRIENDS_WITH]->(e);
 
 // Adde person nodes from another friend group
 CREATE
@@ -146,7 +134,7 @@ CREATE (pKalel)-[:LISTENS_TO{artists:["Legiao Urbana", "Ben Jor", "Chico Buarque
   (pZakria)-[:PLAYS{games:["Smash Bros."]}]->(fighting), (pGrace)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
   (pJohnny)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pPascal)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
   (pZakria)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pJoseph)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pMolly)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
-  (pSamuel)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pDamian)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pLeo)-[:PLAYS{games:["Minecraft"]}]->(sandbox)
+  (pSamuel)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pDamian)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pLeo)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
   (pBecky)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pAron)-[:PLAYS{games:["Minecraft"]}]->(sandbox), 
   (pAkina)-[:PLAYS{games:["Chess"]}]->(strat), (pAlex)-[:PLAYS{games:["Chess"]}]->(strat),
   (pKalel)-[:PLAYS]->(eguitar), (pKalel)-[:PLAYS]->(aguitar), (pKalel)-[:PLAYS]->(piano),
@@ -191,7 +179,7 @@ MATCH
 
 CREATE 
 (pKalel)-[:ATTENDS_TO]->(tbz),(pZakria)-[:ATTENDS_TO]->(tbz),(pAron)-[:ATTENDS_TO]->(tbz),
-(pJohnny)-[:ATTENDS_TO]->(tbz),(pPascal)-[:ATTENDS_TO]->(tbz), (pPascal)-[:ATTENDS_TO]->(bmz),(pJohnny)-[:ATTENDS_TO]->(bmz)
+(pJohnny)-[:ATTENDS_TO]->(tbz),(pPascal)-[:ATTENDS_TO]->(tbz), (pPascal)-[:ATTENDS_TO]->(bmz),(pJohnny)-[:ATTENDS_TO]->(bmz),
 (pKalel)-[:ATTENDS_TO]->(bmz), (pZakria)-[:ATTENDS_TO]->(bmz), (pAron)-[:ATTENDS_TO]->(bmz),
 (pJoseph)-[:ATTENDS_TO]->(bu), (pMilena)-[:ATTENDS_TO]->(gbw), (pGrace)-[:ATTENDS_TO]->(tbz),
 (pAkina)-[:ATTENDS_TO]->(hs), (pAlex)-[:ATTENDS_TO]->(mng),(pBecky)-[:ATTENDS_TO]->(mng),

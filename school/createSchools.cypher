@@ -1,7 +1,0 @@
-CREATE (tbz:School {name:"TBZ Technische Berufsschule Zürich", location: "Zürich", type: "Technische Berufsschule"}),
-        (mng:School{name: "MNG Kantonsschule Rämibühl", location:"Zürich", type:"Kantonsschule"}),
-        (bmz:School{name: "BMZ Berufmaturitätsschule Zürich", location: "Zürich", type: "Berufmaturitätsschule"}),
-        (gbw:School{name: "Gewerbliche Berufsschule Wetzikon", location:"Wetzikon", type: "Technische Berufsschule"}),
-        (bu:School {name: "Bildungszentrum Uster", location:"Uster", type: "Technische Berufsschule"}),
-        (hs:School{name: "Hull's School", location:"Zürich", type: "Privates Gymnasium"}),
-        (hmz:School{name: "Handelsmittelschule Zürich", location:"Zürich", type: "Mittelschule"}),

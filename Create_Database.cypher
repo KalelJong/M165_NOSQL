@@ -1,5 +1,5 @@
 
-// Create nodes
+// //--------------------PERSONS--------------------
 CREATE (pZakria:Person {firstname: 'Zakria', lastname: 'Samma', birthday: date('2005-11-30')}), 
 	   (pKalel:Person {firstname: 'Kalel', lastname: 'Poeta', birthday: date('2005-01-03')}),
 	   (pMolly:Person {firstname: 'Molly', lastname: 'Sapey', birthday: date('2006-04-13')}),
@@ -11,38 +11,47 @@ CREATE (pZakria:Person {firstname: 'Zakria', lastname: 'Samma', birthday: date('
 
      
 // Create with relationship
-CREATE p = (pAron:Person {firstname: 'Aron', lastname: 'Heuberger', birthday: date('2005-12-02')})
+CREATE p = 
+(pAron:Person {firstname: 'Aron', lastname: 'Heuberger', birthday: date('2005-12-02')})
 -[ff:DATING {since: date("2022-07-01")}]->(pGrace: Person{firstname: 'Grace', lastname: 'Rose', birthday: date('2005-12-02')})
-RETURN p
+RETURN p;
 
-// Update node property
-MATCH (n {firstname: "Grace"}) SET n.birthday = date("2005-12-24") Return n;
 
-// Get All nodes and relationships
-MATCH (n) return n;
-
-// Select Node
-MATCH (pZakria:Person) WHERE pZakria.firstname = 'Zakria' RETURN pZakria;
+MATCH (e:Person), (c:Person)
+WHERE ID(e) > -1 
+ AND e.firstname <> c.firstname 
+MERGE (e)-[r:FRIENDS_WITH]->(c), (c)-[rel:FRIENDS_WITH]->(e);
 
 // Create relationship between all nodes
 // Explanation: All people created until now are in the same friend group
 MATCH (e:Person), (c:Person)
-WHERE ID(e) > -1 
- AND e.firstname <> c.firstname AND EXISTS((e)-[:FRIENDS_WITH]->(c)) = false
- AND EXISTS((c)-[:FRIENDS_WITH]->(e)) = false 
-
-CREATE (e)-[r:FRIENDS_WITH]->(c), (c)-[rel:FRIENDS_WITH]->(e);
+WHERE 
+  ID(e) > -1 
+ AND
+  e.firstname <> c.firstname
+ AND 
+  EXISTS((e)-[:FRIENDS_WITH]->(c)) = false
+ AND 
+  EXISTS((c)-[:FRIENDS_WITH]->(e)) = false 
+CREATE 
+  (e)-[r:FRIENDS_WITH]->(c), (c)-[rel:FRIENDS_WITH]->(e);
 
 // Adde person nodes from another friend group
-CREATE (pLeo:Person {firstname: 'Leo', lastname: 'Barun', birthday: date('2005-10-02')}),
-	   (pDamian:Person {firstname: 'Damian', lastname: 'Bloesser', birthday: date('2005-10-15')}),
-	   (pSamuel:Person {firstname: 'Samuel', lastname: 'Sporer', birthday: date('2005-01-10')})
+CREATE
+  (pLeo:Person {firstname: 'Leo', lastname: 'Barun', birthday: date('2005-10-02')}),
+  (pDamian:Person {firstname: 'Damian', lastname: 'Bloesser', birthday: date('2005-10-15')}),
+  (pSamuel:Person {firstname: 'Samuel', lastname: 'Sporer', birthday: date('2005-01-10')}),
+  (pJohnny:Person {firstname: "Jonathan", lastname: "Russ", birthday: date("2005-12-12")}),
+  (pPascal:Person {firstname: "Pascal", lastname: "Rieder", birthday: date("2005-06-02")})
 // Create friendship between person nodes
 MATCH p = 
   (pKalel:Person {firstname: "Kalel"}),
   (pLeo:Person {firstname: "Leo"}),
   (pDamian:Person {firstname: "Damian"}),
-  (pSamuel:Person {firstname: "Samuel"})
+  (pSamuel:Person {firstname: "Samuel"}),
+  (pJohnny:Person {firstname: "Jonathan"}),
+  (pPascal:Person {firstname: "Pascal"}),
+  (pZakria:Person {firstname: "Zakria"})
 CREATE (pKalel)-[ff:FRIENDS_WITH]->(pLeo),
 (pLeo)-[ee:FRIENDS_WITH]->(pKalel),
 (pKalel)-[bb:FRIENDS_WITH]->(pDamian),
@@ -54,10 +63,40 @@ CREATE (pKalel)-[ff:FRIENDS_WITH]->(pLeo),
 (pLeo)-[ii:FRIENDS_WITH]->(pSamuel),
 (pSamuel)-[jj:FRIENDS_WITH]->(pLeo),
 (pSamuel)-[kk:FRIENDS_WITH]->(pDamian),
-(pDamian)-[ll:FRIENDS_WITH]->(pSamuel)
-RETURN aa
+(pDamian)-[ll:FRIENDS_WITH]->(pSamuel),
+(pKalel)-[:FRIENDS_WITH]->(pJohnny),
+(pJohnny)-[:FRIENDS_WITH]->(pKalel),
+(pJohnny)-[:FRIENDS_WITH]->(pPascal),
+(pPascal)-[:FRIENDS_WITH]->(pJohnny),
+(pKalel)-[:FRIENDS_WITH]->(pPascal),
+(pPascal)-[:FRIENDS_WITH]->(pKalel),
+(pZakria)-[:FRIENDS_WITH]->(pPascal),
+(pPascal)-[:FRIENDS_WITH]->(pZakria),
+(pZakria)-[:FRIENDS_WITH]->(pJohnny),
+(pJohnny)-[:FRIENDS_WITH]->(pZakria)
+RETURN p;
 
-// FIRST ADD HOBBIES FROM FILE hobby/createHobby.cypher
+//--------------------HOBBIES--------------------
+CREATE 
+(aa:Hobby {hobby:'gaming', genre:'shooter'}),
+(bb:Hobby {hobby:'gaming', genre:'strategie'}),
+(cc:Hobby {hobby:'gaming', genre:'sandbox'}),
+(dd:Hobby {hobby:'gaming', genre:'fighting'}),
+(ee:Hobby {hobby:'music', genre:'indie'}),
+(ff:Hobby {hobby:'music', genre:'rock'}),
+(gg:Hobby {hobby:'music', genre:'pop'}),
+(hh:Hobby {hobby:'music', genre:'bedroom pop'}),
+(ii:Hobby {hobby:'music', genre:'mpb'}),
+(jj:Hobby {hobby:'music', genre:'alt-rock'}),
+(kk:Hobby {hobby:'music', genre:'early 2000s punk-pop'}),
+(ll:Hobby {hobby:'music', genre:'jazz'}),
+(mm:Hobby {hobby:'music', genre: 'metal'}),
+(oo:Hobby {hobby:'instrument', type:"acoustic guitar"}),
+(nn:Hobby {hobby:'instrument', type:"electric guitar"}),
+(pp:Hobby {hobby:'instrument', type:"bass guitar"}),
+(qq:Hobby {hobby:'instrument',type:"keyboard/piano"}),
+(rr:Hobby {hobby:'instrument', type:"violin"}),
+(ss:Hobby {hobby:'music', genre: 'rap'});
 
 // Add relationship to hobbies
 MATCH
@@ -74,9 +113,12 @@ MATCH
   (pLeo:Person {firstname: "Leo"}),
   (pDamian:Person {firstname: "Damian"}),
   (pSamuel:Person {firstname: "Samuel"}),
+  (pJohnny:Person {firstname: "Jonathan"}),
+  (pPascal:Person {firstname: "Pascal"}),
   (mpb:Hobby{genre:"mpb"}),
   (shooter:Hobby {hobby:'gaming', genre:'shooter'}),
   (indie:Hobby {hobby:'music', genre:'indie'}),
+  (rap:Hobby {hobby:'music', genre: 'rap'}),
   (bPop:Hobby {hobby:'music', genre:'bedroom pop'}),
   (alternative:Hobby {hobby:'music', genre:'alt-rock'}),
   (metal:Hobby {hobby:'music', genre: 'metal'}),
@@ -101,7 +143,8 @@ CREATE (pKalel)-[:LISTENS_TO{artists:["Legiao Urbana", "Ben Jor", "Chico Buarque
   (pGrace)-[:LISTENS_TO]->(pp2000), (pGrace)-[:LISTENS_TO]->(rock),
   (pAlex)-[:LISTENS_TO]->(rock),(pAlex)-[:LISTENS_TO]->(alternative),
   (pZakria)-[:PLAYS{games:["Valorant", "Overwatch"]}]->(shooter), (pZakria)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
-  (pZakria)-[:PLAYS{games:["Smash Bros."]}]->(fighting), (pGrace)-[:PLAYS{games:["Minecraft"]}]->(sandbox)
+  (pZakria)-[:PLAYS{games:["Smash Bros."]}]->(fighting), (pGrace)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
+  (pJohnny)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pPascal)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
   (pZakria)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pJoseph)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pMolly)-[:PLAYS{games:["Minecraft"]}]->(sandbox),
   (pSamuel)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pDamian)-[:PLAYS{games:["Minecraft"]}]->(sandbox),(pLeo)-[:PLAYS{games:["Minecraft"]}]->(sandbox)
   (pBecky)-[:PLAYS{games:["Minecraft"]}]->(sandbox), (pAron)-[:PLAYS{games:["Minecraft"]}]->(sandbox), 
@@ -109,9 +152,19 @@ CREATE (pKalel)-[:LISTENS_TO{artists:["Legiao Urbana", "Ben Jor", "Chico Buarque
   (pKalel)-[:PLAYS]->(eguitar), (pKalel)-[:PLAYS]->(aguitar), (pKalel)-[:PLAYS]->(piano),
   (pAlex)-[:PLAYS]->(bguitar), (pAlex)-[:PLAYS]->(piano),
   (pAkina)-[:PLAYS]->(violin), 
-  (pGrace)-[:PLAYS]->(aguitar),(pGrace)-[:PLAYS]->(eguitar)
+  (pGrace)-[:PLAYS]->(aguitar),(pGrace)-[:PLAYS]->(eguitar),
+  (pJohnny)-[:LISTENS_TO]->(rap), (pJohnny)-[:LISTENS_TO]->(pop)
 
-// FIRST ADD SCHOOLS FROM FILE school/createSchools.cypher
+//--------------------SCHOOLS--------------------
+CREATE 
+(tbz:School {name:"TBZ Technische Berufsschule Zürich", location: "Zürich", type: "Technische Berufsschule"}),
+(mng:School{name: "MNG Kantonsschule Rämibühl", location:"Zürich", type:"Kantonsschule"}),
+(bmz:School{name: "BMZ Berufmaturitätsschule Zürich", location: "Zürich", type: "Berufmaturitätsschule"}),
+(gbw:School{name: "Gewerbliche Berufsschule Wetzikon", location:"Wetzikon", type: "Technische Berufsschule"}),
+(bu:School {name: "Bildungszentrum Uster", location:"Uster", type: "Technische Berufsschule"}),
+(hs:School{name: "Hull's School", location:"Zürich", type: "Privates Gymnasium"}),
+(hmz:School{name: "Handelsmittelschule Zürich", location:"Zürich", type: "Mittelschule"});
+
 MATCH
   (pKalel:Person {firstname: "Kalel"}),
   (pMolly:Person {firstname: 'Molly'}),
@@ -126,6 +179,8 @@ MATCH
   (pLeo:Person {firstname: "Leo"}),
   (pDamian:Person {firstname: "Damian"}),
   (pSamuel:Person {firstname: "Samuel"}),
+  (pJohnny:Person {firstname: "Jonathan"}),
+  (pPascal:Person {firstname: "Pascal"}),
   (tbz:School {name:"TBZ Technische Berufsschule Zürich"}),
   (mng:School{name: "MNG Kantonsschule Rämibühl"}),
   (bmz:School{name: "BMZ Berufmaturitätsschule Zürich"}),
@@ -134,26 +189,12 @@ MATCH
   (hs:School{name: "Hull's School"}),
   (hmz:School{name: "Handelsmittelschule Zürich"})
 
-CREATE (pKalel)-[:ATTENDS_TO]->(tbz),(pZakria)-[:ATTENDS_TO]->(tbz),(pAron)-[:ATTENDS_TO]->(tbz),
+CREATE 
+(pKalel)-[:ATTENDS_TO]->(tbz),(pZakria)-[:ATTENDS_TO]->(tbz),(pAron)-[:ATTENDS_TO]->(tbz),
+(pJohnny)-[:ATTENDS_TO]->(tbz),(pPascal)-[:ATTENDS_TO]->(tbz), (pPascal)-[:ATTENDS_TO]->(bmz),(pJohnny)-[:ATTENDS_TO]->(bmz)
 (pKalel)-[:ATTENDS_TO]->(bmz), (pZakria)-[:ATTENDS_TO]->(bmz), (pAron)-[:ATTENDS_TO]->(bmz),
 (pJoseph)-[:ATTENDS_TO]->(bu), (pMilena)-[:ATTENDS_TO]->(gbw), (pGrace)-[:ATTENDS_TO]->(tbz),
 (pAkina)-[:ATTENDS_TO]->(hs), (pAlex)-[:ATTENDS_TO]->(mng),(pBecky)-[:ATTENDS_TO]->(mng),
 (pLeo)-[:ATTENDS_TO]->(hmz),(pDamian)-[:ATTENDS_TO]->(hmz),(pSamuel)-[:ATTENDS_TO]->(hmz)
 
-// Delete friendship
-MATCH (pKalel:Person {firstname: 'Kalel'})-[r:FRIENDS_WITH]->(pZakria:Person {firstname: 'Zakria'})
-DELETE r
 
-// Add relationship to existing nodes
-MATCH
-  (pKalel:Person),
-  (pZakria:Person)
-WHERE pKalel.firstname = 'Kalel' AND pZakria.firstname = 'Zakria'
-CREATE (pKalel)-[:FRIENDS_WITH]->(pZakria), (pZakria)-[:FRIENDS_WITH]->(pKalel)
-return pKalel, pZakria;
-
-// Delete Node and it's relationships
-MATCH (uAron: User) WHERE ID(uAron) = 4 DETACH DELETE uAron;
-
-//Query for people with same birthdates and create re
-MATCH (n:Person), (c:Person) WHERE n.firstname <> c.firstname AND n.birthday = c.birthday return c, n

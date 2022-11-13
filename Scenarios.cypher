@@ -11,9 +11,10 @@ RETURN
 // SCENARIO 2
 // Kalel isn't friends with Jonathan anymore
  MATCH 
-  (pKalel: Person {firstname: "Kalel"})-[friendship:FRIENDS_WITH]-(pJohnny:Person{firstname = "Jonathan"}) 
+  (pKalel: Person {firstname: "Kalel"})-[friendship:FRIENDS_WITH]-(pJohnny:Person{firstname:"Jonathan"}) 
  DELETE
- pKalel,friendship,pJohnny
+ friendship
+ return pKalel, pJohnny;
 
 // SCENARIO 3
 // Kalel would like to know which of his friends have the same music taste as him
@@ -59,3 +60,10 @@ CREATE
  (pKalel)-[:FRIENDS_WITH]->(pJohnny), (pJohnny)-[:FRIENDS_WITH]->(pKalel)
 RETURN
  pKalel, pJohnny;
+
+ //SCENARIO 8
+ // GET People who play an instrument
+ MATCH
+    (people:Person)-[:PLAYS]->(instrument:Hobby{hobby:"instrument"})
+RETURN
+people,instrument

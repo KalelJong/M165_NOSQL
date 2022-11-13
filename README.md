@@ -6,7 +6,7 @@ Wir haben uns sehr viel Mühe für dieses Projekt gegeben und denken, dass unser
 Vielen Dank und wir wünschen Ihnen eine schöne Woche.
 -Kalel und Zakria :D
 ## GraphDB Überblick
-
+<img src="https://raw.githubusercontent.com/KalelJong/M165_NOSQL/main/GraphDB.PNG">
 
 ## Dokumentation
 
